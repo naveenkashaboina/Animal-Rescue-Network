@@ -13,7 +13,7 @@ const app = exp();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173","animal-rescue-network-flame.vercel.app"],
+    origin: ["http://localhost:5173","https://animal-rescue-network-flame.vercel.app"],
     credentials: true,
   })
 );
