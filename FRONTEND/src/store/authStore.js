@@ -2,7 +2,7 @@ import { create } from "zustand";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-const API = "http://localhost:4001";
+const API = "https://animal-rescue-network-fewi.onrender.com";
 
 const authHeader = () => ({
   headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
