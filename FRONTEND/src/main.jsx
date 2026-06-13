@@ -4,8 +4,8 @@ import './index.css'
 import App from './App.jsx'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:4001'
-axios.defaults.withCredentials = false
+axios.defaults.baseURL = 'https://animal-rescue-network-fewi.onrender.com'
+axios.defaults.withCredentials = true
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
