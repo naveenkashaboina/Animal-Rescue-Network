@@ -28,7 +28,6 @@ function Header() {
         <NavLink to="/" className={navBrandClass}>
           Animal Rescue Network
         </NavLink>
-
         <ul className={navLinksClass}>
           <li>
             <NavLink to="/" end className={({ isActive }) =>
@@ -36,7 +35,6 @@ function Header() {
               Home
             </NavLink>
           </li>
-
           {!isAuthenticated && (
             <>
               <li>

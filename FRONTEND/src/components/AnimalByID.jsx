@@ -23,8 +23,7 @@ function AnimalByID() {
   const [submitting, setSubmitting] = useState(false);
 
   const fetchAnimal = () => {
-    axios
-      .get(`/adopter-api/animals`)
+    axios.get(`/adopter-api/animals`)
       .then((res) => {
         const found = res.data.payload?.find((a) => a._id === id);
         setAnimal(found || null);
@@ -34,7 +33,6 @@ function AnimalByID() {
   };
 
   useEffect(() => { fetchAnimal(); }, [id]);
-
   const myRequest = animal?.inquiries?.find(
     (inq) => inq.user?._id === currentUser?.id || inq.user === currentUser?.id
   );
@@ -65,7 +63,6 @@ function AnimalByID() {
     if (status === "Rejected") return reqRejected;
     return reqPending;
   };
-
   if (loading) return <p className={loadingClass}>Loading...</p>;
   if (!animal)  return <p className={`${errorClass} m-8`}>Animal not found.</p>;
 
@@ -74,22 +71,17 @@ function AnimalByID() {
       <div className={animalPageWrapper}>
         <button
           onClick={() => navigate(-1)}
-          className="text-[#2d6a1f] text-sm mb-6 hover:text-[#1a4012] transition"
-        >
+          className="text-[#2d6a1f] text-sm mb-6 hover:text-[#1a4012] transition">
           Back
         </button>
-
         {animal.imageUrl && (
           <img src={animal.imageUrl} alt={animal.name} className={animalImageLarge} />
         )}
-
         <div className="flex items-center gap-3 mb-3">
           <span className={animalSpeciesBadge}>{animal.species}</span>
           <span className={getStatusClass(animal.status)}>{animal.status}</span>
         </div>
-
         <h1 className={animalMainTitle}>{animal.name}</h1>
-
         <div className={`${animalMetaRow} mt-4`}>
           <span>{animal.breed || "Mixed"}</span>
           <span>Age: {animal.age}</span>
@@ -97,11 +89,8 @@ function AnimalByID() {
         </div>
 
         <p className={animalContent}>{animal.description}</p>
-
         <div className={divider} />
-
         <h2 className={`${headingClass} mb-5`}>Adoption Requests</h2>
-
         {isAuthenticated && currentUser?.role === "USER" && (
           <div className="mb-8">
             {animal.status !== "Available" ? (
@@ -125,8 +114,7 @@ function AnimalByID() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Introduce yourself and why you'd be a great match..."
-                  className={`${inputClass} flex-1`}
-                />
+                  className={`${inputClass} flex-1`} />
                 <button onClick={handleRequest} className={primaryBtn} disabled={submitting}>
                   {submitting ? "Sending..." : "Request Adoption"}
                 </button>
@@ -134,13 +122,11 @@ function AnimalByID() {
             )}
           </div>
         )}
-
         {!isAuthenticated && (
           <p className={`${bodyText} mb-6 text-sm`}>
             Please login as an Adopter to request adoption.
           </p>
         )}
-
         <div className={inquiriesWrapper}>
           {animal.inquiries?.length === 0 && (
             <p className="text-[#7a9970] text-sm">No requests yet.</p>
@@ -162,7 +148,6 @@ function AnimalByID() {
             </div>
           ))}
         </div>
-
         <div className={animalFooter}>
           Posted on {new Date(animal.createdAt).toLocaleDateString()}
         </div>

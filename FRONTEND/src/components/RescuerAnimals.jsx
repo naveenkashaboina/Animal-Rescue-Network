@@ -14,15 +14,13 @@ function RescuerAnimals() {
   const navigate = useNavigate();
 
   const fetchAnimals = () => {
-    axios
-      .get("/rescuer-api/animals")
+    axios.get("/rescuer-api/animals")
       .then((res) => setAnimals(res.data.payload || []))
       .catch(() => {})
       .finally(() => setLoading(false));
   };
 
   useEffect(() => { fetchAnimals(); }, []);
-
   const handleToggleStatus = async (animal) => {
     try {
       await axios.patch("/rescuer-api/animals", {
@@ -35,7 +33,6 @@ function RescuerAnimals() {
       toast.error(err.response?.data?.message || "Failed to update");
     }
   };
-
   if (loading) return <p className={loadingClass}>Loading...</p>;
   if (animals.length === 0)
     return <p className={emptyStateClass}>You have not posted any animals yet.</p>;

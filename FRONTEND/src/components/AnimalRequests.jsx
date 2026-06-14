@@ -18,15 +18,13 @@ function AnimalRequests() {
   const [loading, setLoading] = useState(true);
 
   const fetchAnimal = () => {
-    axios
-      .get(`/rescuer-api/animal/${id}/requests`)
+    axios.get(`/rescuer-api/animal/${id}/requests`)
       .then((res) => setAnimal(res.data.payload))
       .catch(() => {})
       .finally(() => setLoading(false));
   };
 
   useEffect(() => { fetchAnimal(); }, [id]);
-
   const handleApprove = async (inquiryId) => {
     try {
       const res = await axios.put("/rescuer-api/inquiry/approve", {
@@ -58,7 +56,6 @@ function AnimalRequests() {
 
   if (loading) return <p className={loadingClass}>Loading...</p>;
   if (!animal)  return <p className={`${errorClass} m-8`}>Animal not found.</p>;
-
   const adopted = animal.inquiries?.find((i) => i.status === "Approved");
 
   return (
@@ -66,35 +63,28 @@ function AnimalRequests() {
       <div className={pageWrapper}>
         <button
           onClick={() => navigate("/rescuer-profile/animals")}
-          className="text-[#2d6a1f] text-sm mb-6 hover:text-[#1a4012] transition"
-        >
+          className="text-[#2d6a1f] text-sm mb-6 hover:text-[#1a4012] transition" >
           Back to My Animals
         </button>
 
         {animal.imageUrl && (
           <img src={animal.imageUrl} alt={animal.name} className={animalImageLarge} />
         )}
-
         <span className={animalSpeciesBadge}>{animal.species}</span>
         <h1 className={`${headingClass} mt-1 mb-1`}>{animal.name}</h1>
         <p className={animalMeta}>Age: {animal.age} {animal.breed && `· ${animal.breed}`}</p>
-
         {adopted && (
           <div className={`${successClass} mt-4`}>
             This animal has been adopted. All other requests have been automatically rejected.
           </div>
         )}
-
         <div className={divider} />
-
         <h2 className={`${headingClass} mb-6`}>
           Adoption Requests ({animal.inquiries?.length || 0})
         </h2>
-
         {animal.inquiries?.length === 0 && (
           <p className={emptyStateClass}>No requests yet.</p>
         )}
-
         <div className={inquiriesWrapper}>
           {animal.inquiries?.map((inq) => (
             <div key={inq._id} className={inquiryCard}>
@@ -114,9 +104,7 @@ function AnimalRequests() {
                 </div>
                 <span className={getReqStatusClass(inq.status)}>{inq.status}</span>
               </div>
-
               <p className={inquiryText}>{inq.message}</p>
-
               {inq.status === "Pending" && !adopted && (
                 <div className="flex gap-2 mt-3">
                   <button onClick={() => handleApprove(inq._id)} className={approveBtn}>

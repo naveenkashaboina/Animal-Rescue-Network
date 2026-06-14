@@ -10,7 +10,6 @@ import cors from "cors";
 config();
 
 const app = exp();
-
 app.use(
   cors({
     origin: ["http://localhost:5173","https://animal-rescue-network-flame.vercel.app"],
@@ -20,7 +19,6 @@ app.use(
 
 app.use(cookieParser());
 app.use(exp.json());
-
 app.use("/adopter-api", adopterApp);
 app.use("/rescuer-api", rescuerApp);
 app.use("/admin-api", adminApp);
@@ -37,7 +35,6 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
-
 connectDB();
 
 app.use((req, res, next) => {

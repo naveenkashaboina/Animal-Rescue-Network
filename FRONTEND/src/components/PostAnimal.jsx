@@ -28,11 +28,9 @@ function PostAnimal() {
       if (data.imageUrl?.[0]) {
         formData.append("imageUrl", data.imageUrl[0]);
       }
-
       await axios.post("/rescuer-api/animal", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
       toast.success("Animal posted successfully!");
       reset();
       navigate("/rescuer-profile/animals");
@@ -47,9 +45,7 @@ function PostAnimal() {
   return (
     <div className={formCard}>
       <h2 className={formTitle}>Post a Rescue Animal</h2>
-
       {serverError && <p className={`${errorClass} mb-4`}>{serverError}</p>}
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className={formGroup}>
@@ -67,8 +63,7 @@ function PostAnimal() {
             <label className={labelClass}>Species</label>
             <select
               className={inputClass}
-              {...register("species", { required: "Species is required" })}
-            >
+              {...register("species", { required: "Species is required" })}>
               <option value="">Select species</option>
               {["Dog", "Cat", "Bird", "Rabbit", "Reptile", "Other"].map((s) => (
                 <option key={s} value={s}>{s}</option>

@@ -27,7 +27,6 @@ function ReportStray() {
       await axios.post("/adopter-api/stray-report", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
       toast.success("Stray report submitted! A rescuer will pick it up.");
       reset();
       navigate("/adopter-profile");
@@ -46,9 +45,7 @@ function ReportStray() {
         <p className="text-sm text-[#4a6741] text-center mb-6">
           Spotted a stray? Submit a report and a nearby rescuer will be notified.
         </p>
-
         {serverError && <p className={`${errorClass} mb-4`}>{serverError}</p>}
-
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={formGroup}>
             <label className={labelClass}>Species</label>

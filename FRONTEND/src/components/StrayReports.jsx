@@ -15,8 +15,7 @@ function StrayReports() {
   const navigate = useNavigate();
 
   const fetchReports = () => {
-    axios
-      .get("/rescuer-api/stray-reports")
+    axios.get("/rescuer-api/stray-reports")
       .then((res) => setReports(res.data.payload || []))
       .catch(() => {})
       .finally(() => setLoading(false));

@@ -30,7 +30,6 @@ function EditAnimal() {
     navigate("/rescuer-profile");
     return null;
   }
-
   const onSubmit = async (data) => {
     setLoading(true);
     setServerError("");
@@ -53,9 +52,7 @@ function EditAnimal() {
     <div className={`${pageBackground} py-10 px-4`}>
       <div className={formCard}>
         <h2 className={formTitle}>Edit Animal</h2>
-
         {serverError && <p className={`${errorClass} mb-4`}>{serverError}</p>}
-
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className={formGroup}>
@@ -67,7 +64,6 @@ function EditAnimal() {
               />
               {errors.name && <p className={errorClass}>{errors.name.message}</p>}
             </div>
-
             <div className={formGroup}>
               <label className={labelClass}>Species</label>
               <select

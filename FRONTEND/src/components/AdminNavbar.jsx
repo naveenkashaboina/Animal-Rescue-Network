@@ -4,16 +4,13 @@ import { useAuth } from "../store/authStore";
 function AdminNavbar() {
   const { logout, currentUser } = useAuth();
   const navigate = useNavigate();
-
   const handleLogout = async () => {
     await logout();
     navigate("/login");
   };
 
-  const linkClass =
-    "flex items-center gap-2 text-sm text-[#a8c9a0] hover:text-[#d4e8cc] hover:bg-[#2d6a1f]/20 px-4 py-2 rounded-xl transition-colors font-normal";
-  const activeLinkClass =
-    "flex items-center gap-2 text-sm text-[#d4e8cc] bg-[#2d6a1f]/30 px-4 py-2 rounded-xl font-semibold";
+  const linkClass="flex items-center gap-2 text-sm text-[#a8c9a0] hover:text-[#d4e8cc] hover:bg-[#2d6a1f]/20 px-4 py-2 rounded-xl transition-colors font-normal";
+  const activeLinkClass="flex items-center gap-2 text-sm text-[#d4e8cc] bg-[#2d6a1f]/30 px-4 py-2 rounded-xl font-semibold";
 
   return (
     <nav className="bg-[#132210] border-b border-[#2d6a1f]/30 sticky top-0 z-50">
@@ -23,30 +20,25 @@ function AdminNavbar() {
           <span className="text-sm font-bold text-[#d4e8cc] tracking-tight">
             Animal Rescue — Admin
           </span>
-
           <ul className="flex items-center gap-1">
             <li>
               <NavLink
                 to="/admin/dashboard"
                 end
-                className={({ isActive }) => (isActive ? activeLinkClass : linkClass)}
-              >
+                className={({ isActive }) => (isActive ? activeLinkClass : linkClass)}>
                 Dashboard
               </NavLink>
             </li>
             <li>
               <NavLink
                 to="/admin/animals"
-                className={({ isActive }) => (isActive ? activeLinkClass : linkClass)}
-              >
-                Animals
-              </NavLink>
+                className={({ isActive }) => (isActive ? activeLinkClass : linkClass)}>
+                Animals</NavLink>
             </li>
             <li>
               <NavLink
                 to="/admin/users"
-                className={({ isActive }) => (isActive ? activeLinkClass : linkClass)}
-              >
+                className={({ isActive }) => (isActive ? activeLinkClass : linkClass)}>
                 Users
               </NavLink>
             </li>
@@ -54,8 +46,7 @@ function AdminNavbar() {
               <NavLink
                 to="/"
                 end
-                className={linkClass}
-              >
+                className={linkClass}>
                 Public Site
               </NavLink>
             </li>
@@ -71,12 +62,10 @@ function AdminNavbar() {
           </div>
           <button
             onClick={handleLogout}
-            className="text-xs text-[#7a9970] hover:text-[#d4e8cc] hover:bg-[#2d6a1f]/20 px-3 py-2 rounded-xl transition-colors cursor-pointer"
-          >
+            className="text-xs text-[#7a9970] hover:text-[#d4e8cc] hover:bg-[#2d6a1f]/20 px-3 py-2 rounded-xl transition-colors cursor-pointer">
             Logout
           </button>
         </div>
-
       </div>
     </nav>
   );

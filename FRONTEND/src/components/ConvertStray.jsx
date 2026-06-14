@@ -18,12 +18,10 @@ function ConvertStray() {
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { breed: "", age: "", description: report?.description || "" },
   });
-
   if (!report) {
     navigate("/rescuer-profile/stray-reports");
     return null;
   }
-
   const onSubmit = async (data) => {
     setLoading(true);
     setServerError("");
@@ -56,9 +54,7 @@ function ConvertStray() {
           Fill in the details you now know about this animal. It will be listed as "In Care"
           and appear on the home page immediately.
         </p>
-
         {serverError && <p className={`${errorClass} mb-4`}>{serverError}</p>}
-
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className={formGroup}>
@@ -67,8 +63,7 @@ function ConvertStray() {
                 type="text"
                 placeholder="e.g. Brownie"
                 className={inputClass}
-                {...register("name", { required: "Name is required" })}
-              />
+                {...register("name", { required: "Name is required" })}/>
               {errors.name && <p className={errorClass}>{errors.name.message}</p>}
             </div>
 
@@ -112,8 +107,7 @@ function ConvertStray() {
             <button
               type="button"
               className={secondaryBtn}
-              onClick={() => navigate("/rescuer-profile/stray-reports")}
-            >
+              onClick={() => navigate("/rescuer-profile/stray-reports")}>
               Cancel
             </button>
           </div>

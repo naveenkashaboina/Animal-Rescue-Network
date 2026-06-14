@@ -32,7 +32,6 @@ function Register() {
       await axios.post("/auth/users", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
       toast.success("Account created! Please login.");
       navigate("/login");
     } catch (err) {
@@ -47,9 +46,7 @@ function Register() {
     <div className={`${pageBackground} flex items-center justify-center py-16 px-4`}>
       <div className={formCard}>
         <h2 className={formTitle}>Create Account</h2>
-
         {serverError && <p className={`${errorClass} mb-4`}>{serverError}</p>}
-
         <form onSubmit={handleSubmit(onRegister)}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className={formGroup}>

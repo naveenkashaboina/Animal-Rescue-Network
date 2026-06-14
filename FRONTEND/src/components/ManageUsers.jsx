@@ -46,7 +46,6 @@ function ManageUsers() {
         {!loading && users.length === 0 && (
           <p className={emptyStateClass}>No users found.</p>
         )}
-
         {!loading && users.length > 0 && (
           <div className="flex flex-col gap-3">
             {users.map((user) => (
@@ -70,8 +69,7 @@ function ManageUsers() {
                       user.isUserActive
                         ? "bg-[#2d6a1f]/15 text-[#1a4012]"
                         : "bg-[#c0392b]/15 text-[#8b2317]"
-                    }`}
-                  >
+                    }`}>
                     {user.isUserActive ? "Active" : "Blocked"}
                   </span>
                   <button
@@ -80,8 +78,7 @@ function ManageUsers() {
                       user.isUserActive
                         ? "bg-[#c0392b] text-white hover:bg-[#8b2317]"
                         : "bg-[#2d6a1f] text-white hover:bg-[#1a4012]"
-                    }`}
-                  >
+                    }`}>
                     {user.isUserActive ? "Block" : "Unblock"}
                   </button>
                 </div>

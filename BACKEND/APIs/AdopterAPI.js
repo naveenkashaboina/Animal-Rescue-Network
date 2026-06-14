@@ -15,33 +15,25 @@ adopterApp.get("/animals", async (req, res) => {
 adopterApp.put("/animals", verifyToken("USER"), async (req, res) => {
   const { animalId, message } = req.body;
   const userId = req.user?.id;
-
-  const animalDocument = await animalModel
-    .findOne({ _id: animalId, isAnimalActive: true })
+  const animalDocument = await animalModel.findOne({ _id: animalId, isAnimalActive: true })
     .populate("inquiries.user", "email firstName");
-
   if (!animalDocument) {
     return res.status(404).json({ message: "Animal not found" });
   }
-
   if (animalDocument.status !== "Available") {
     return res.status(400).json({ message: "This animal is not available for adoption" });
   }
-
   const alreadyRequested = animalDocument.inquiries.some(
     (inq) => inq.user?._id?.toString() === userId || inq.user?.toString() === userId
   );
   if (alreadyRequested) {
     return res.status(400).json({ message: "You have already sent a request for this animal" });
   }
-
   animalDocument.inquiries.push({ user: userId, message, status: "Pending" });
   await animalDocument.save();
-
   const populated = await animalModel
     .findById(animalId)
     .populate("inquiries.user", "email firstName");
-
   res.status(200).json({ message: "Adoption request sent", payload: populated });
 });
 
@@ -53,11 +45,7 @@ adopterApp.post("/stray-report", verifyToken("USER"), upload.single("imageUrl"),
       cloudinaryResult = await uploadToCloudinary(req.file.buffer);
     }
     const report = new strayReportModel({
-      reportedBy: req.user?.id,
-      species,
-      location,
-      description,
-      imageUrl: cloudinaryResult?.secure_url,
+      reportedBy: req.user?.id,species,location,description,imageUrl: cloudinaryResult?.secure_url,
     });
     await report.save();
     res.status(201).json({ message: "Stray report submitted" });

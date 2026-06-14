@@ -21,7 +21,7 @@ function AllAnimals() {
 
   return (
     <div className="min-h-screen bg-[#f2f5ee]">
-      <AdminNavbar />
+      <AdminNavbar/>
       <div className={pageWrapper}>
         <h1 className={`${headingClass} mb-8`}>All Rescue Animals</h1>
 
@@ -37,15 +37,12 @@ function AllAnimals() {
                 <span
                   className={
                     animal.isAnimalActive ? animalStatusActive : animalStatusDeleted
-                  }
-                >
+                  }>
                   {animal.isAnimalActive ? "Active" : "Inactive"}
                 </span>
-
                 {animal.imageUrl && (
                   <img src={animal.imageUrl} alt={animal.name} className={animalImage} />
                 )}
-
                 <span className={animalSpeciesBadge}>{animal.species}</span>
                 <h3 className={animalTitle}>{animal.name}</h3>
                 {animal.breed && <p className={animalMeta}>{animal.breed}</p>}

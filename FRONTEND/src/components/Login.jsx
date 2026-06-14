@@ -41,9 +41,7 @@ function Login() {
     <div className={`${pageBackground} flex items-center justify-center py-16 px-4`}>
       <div className={formCard}>
         <h2 className={formTitle}>Sign In</h2>
-
         {error && <p className={`${errorClass} mb-4`}>{error}</p>}
-
         <form onSubmit={handleSubmit(onUserLogin)}>
           <div className={formGroup}>
             <label className={labelClass}>Email</label>

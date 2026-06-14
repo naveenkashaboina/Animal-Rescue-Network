@@ -13,20 +13,11 @@ rescuerApp.post("/animal", verifyToken("RESCUER"), upload.single("imageUrl"), as
   try {
     const { name, species, breed, age, description, status } = req.body;
     const rescuerId = req.user.id;
-
     if (req.file) cloudinaryResult = await uploadToCloudinary(req.file.buffer);
-
     const animalDoc = new animalModel({
-      rescuer: rescuerId,
-      name,
-      species,
-      breed: breed || undefined,
-      age,
-      description,
-      status: status || "Available",
+      rescuer: rescuerId,name,species,breed: breed || undefined,age,description,status: status || "Available",
       imageUrl: cloudinaryResult?.secure_url || undefined,
     });
-
     await animalDoc.save();
     res.status(201).json({ message: "Animal posted successfully" });
   } catch (err) {
@@ -86,8 +77,7 @@ rescuerApp.put("/inquiry/approve", verifyToken("RESCUER"), async (req, res) => {
   animal.status = "Adopted";
   animal.adoptedBy = inquiry.user;
   await animal.save();
-  const populated = await animalModel
-    .findById(animalId)
+  const populated = await animalModel.findById(animalId)
     .populate("inquiries.user", "firstName email")
     .populate("adoptedBy", "firstName email");
   res.status(200).json({ message: "Adoption approved", payload: populated });
@@ -106,8 +96,7 @@ rescuerApp.put("/inquiry/reject", verifyToken("RESCUER"), async (req, res) => {
 });
 
 rescuerApp.get("/stray-reports", verifyToken("RESCUER"), async (req, res) => {
-  const reports = await strayReportModel
-    .find({ status: { $in: ["Open", "Claimed"] } })
+  const reports = await strayReportModel.find({ status: { $in: ["Open", "Claimed"] } })
     .populate("reportedBy", "firstName email")
     .sort({ createdAt: -1 });
   res.status(200).json({ message: "Stray reports", payload: reports });
@@ -132,13 +121,7 @@ rescuerApp.post("/stray-reports/convert", verifyToken("RESCUER"), async (req, re
     const report = await strayReportModel.findOne({ _id: reportId, claimedBy: rescuerId });
     if (!report) return res.status(404).json({ message: "Report not found or not claimed by you" });
     const newAnimal = new animalModel({
-      rescuer: rescuerId,
-      name,
-      species: report.species,
-      breed: breed || "",
-      age,
-      description,
-      imageUrl: report.imageUrl || "",
+      rescuer: rescuerId,name,species: report.species,breed: breed || "",age,description, imageUrl: report.imageUrl || "",
       status: "In Care",
     });
     await newAnimal.save();

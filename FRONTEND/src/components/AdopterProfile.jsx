@@ -9,15 +9,12 @@ import {
   strayStatusOpen, strayStatusClaimed,
 } from "../styles/common";
 
-const strayStatusResolved =
-  "text-[10px] font-semibold px-2.5 py-1 rounded-full bg-[#d63b8f]/10 text-[#8b2060]";
-
+const strayStatusResolved = "text-[10px] font-semibold px-2.5 py-1 rounded-full bg-[#d63b8f]/10 text-[#8b2060]";
 function AdopterProfile() {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
   const [reports, setReports] = useState([]);
   const [loadingReports, setLoadingReports] = useState(true);
-
   useEffect(() => {
     axios
       .get("/adopter-api/my-stray-reports")
@@ -25,18 +22,15 @@ function AdopterProfile() {
       .catch(() => {})
       .finally(() => setLoadingReports(false));
   }, []);
-
   const handleLogout = async () => {
     await logout();
     navigate("/login");
   };
-
   const getStatusClass = (status) => {
     if (status === "Open")     return strayStatusOpen;
     if (status === "Claimed")  return strayStatusClaimed;
     return strayStatusResolved;
   };
-
   const statusMessage = (status) => {
     if (status === "Open")
       return "Your report is waiting for a rescuer to pick it up.";
@@ -53,8 +47,7 @@ function AdopterProfile() {
             <img
               src={currentUser.profileImageUrl}
               alt="Profile"
-              className="w-16 h-16 rounded-full object-cover"
-            />
+              className="w-16 h-16 rounded-full object-cover"/>
           ) : (
             <div className="w-16 h-16 rounded-full bg-[#2d6a1f]/10 text-[#2d6a1f] flex items-center justify-center text-2xl font-bold">
               {currentUser?.firstName?.[0]?.toUpperCase()}
@@ -82,30 +75,22 @@ function AdopterProfile() {
         </div>
 
         <h2 className={`${headingClass} mb-5`}>My Stray Reports</h2>
-
         {loadingReports && <p className={loadingClass}>Loading reports...</p>}
-
         {!loadingReports && reports.length === 0 && (
           <p className={emptyStateClass}>
             You have not reported any stray animals yet.
           </p>
         )}
-
         {!loadingReports && reports.length > 0 && (
           <div className="flex flex-col gap-4">
             {reports.map((report) => (
               <div
                 key={report._id}
-                className="bg-[#fdf8e7] border border-[#e8d98a] rounded-2xl p-5"
-              >
+                className="bg-[#fdf8e7] border border-[#e8d98a] rounded-2xl p-5">
                 <div className="flex items-start justify-between gap-4 flex-wrap">
                   <div className="flex gap-4">
                     {report.imageUrl && (
-                      <img
-                        src={report.imageUrl}
-                        alt="Stray"
-                        className="w-16 h-16 rounded-xl object-cover shrink-0"
-                      />
+                      <img src={report.imageUrl}alt="Stray"className="w-16 h-16 rounded-xl object-cover shrink-0"/>
                     )}
                     <div>
                       <p className="text-sm font-semibold text-[#1a2e14]">

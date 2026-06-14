@@ -6,7 +6,6 @@ import { useAuth } from "../store/authStore";
 
 function RootLayout() {
   const checkAuth = useAuth((state) => state.checkAuth);
-
   useEffect(() => {
     checkAuth();
   }, []);
