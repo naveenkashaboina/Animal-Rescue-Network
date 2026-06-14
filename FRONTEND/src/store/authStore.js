@@ -48,6 +48,10 @@ export const useAuth = create((set) => ({
       const res = await axios.get(`${API}/auth/check-auth`, authHeader());
       set({ currentUser: res.data.payload, isAuthenticated: true, loading: false });
     } catch (err) {
+      const isExpired = err.response?.status === 401;
+      if (isExpired) {
+        toast.error("Session expired. Please login again.");
+      }
       localStorage.removeItem("token");
       set({ currentUser: null, isAuthenticated: false, loading: false });
     }

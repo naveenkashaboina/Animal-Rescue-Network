@@ -4,7 +4,7 @@ import { useAuth } from "../store/authStore";
 import { useNavigate } from "react-router";
 import {
   pageBackground, pageWrapper, headingClass, bodyText,
-  mutedText, primaryBtn, secondaryBtn, cardClass, subHeadingClass,
+  mutedText, secondaryBtn, cardClass, subHeadingClass,
   loadingClass, emptyStateClass,
   strayStatusOpen, strayStatusClaimed,
 } from "../styles/common";
@@ -70,7 +70,7 @@ function AdopterProfile() {
         </div>
 
         <div className="flex flex-wrap gap-3 mb-12">
-          <button onClick={() => navigate("/")} className={primaryBtn}>
+          <button onClick={() => navigate("/")} className={secondaryBtn}>
             Browse Animals
           </button>
           <button onClick={() => navigate("/report-stray")} className={secondaryBtn}>
