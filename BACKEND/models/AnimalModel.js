@@ -44,6 +44,9 @@ const animalSchema = new Schema(
       type: String,
       required: [true, "Description is required"],
     },
+    address: {
+      type: String,
+    },
     imageUrl: {
       type: String,
     },
@@ -53,6 +56,15 @@ const animalSchema = new Schema(
       default: "Available",
     },
     adoptedBy: {
+      type: Types.ObjectId,
+      ref: "user",
+      default: null,
+    },
+    fromStray: {
+      type: Boolean,
+      default: false,
+    },
+    strayReportedBy: {
       type: Types.ObjectId,
       ref: "user",
       default: null,

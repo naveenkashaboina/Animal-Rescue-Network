@@ -5,7 +5,7 @@ import {
   pageBackground, pageWrapper, pageTitleClass, bodyText,
   animalGrid, animalTitle, animalMeta, animalImage,
   loadingClass, emptyStateClass, animalSpeciesBadge,
-  statusAvailable, statusAdopted, statusInCare,
+  statusAvailable, statusAdopted, statusInCare, strayRescuedBadge,
   availableCard, inCareCard, adoptedCard,
   sectionAvailable, sectionInCare, sectionAdopted, divider,
 } from "../styles/common";
@@ -15,23 +15,50 @@ const SPECIES = ["All", "Dog", "Cat", "Bird", "Rabbit", "Reptile", "Other"];
 function AnimalCard({ animal, cardClass, navigate }) {
   const statusClass =
     animal.status === "Available" ? statusAvailable
-    : animal.status === "Adopted" ? statusAdopted
+    : animal.status === "Adopted"  ? statusAdopted
     : statusInCare;
+
   return (
     <div className={cardClass} onClick={() => navigate(`/animal/${animal._id}`)}>
       {animal.imageUrl && (
         <img src={animal.imageUrl} alt={animal.name} className={animalImage} />
       )}
-      <div className="flex items-center justify-between">
+
+      <div className="flex items-center flex-wrap gap-1.5">
         <span className={animalSpeciesBadge}>{animal.species}</span>
         <span className={statusClass}>{animal.status}</span>
+        {animal.fromStray && (
+          <span className={strayRescuedBadge}>Rescued Stray</span>
+        )}
       </div>
+
       <h3 className={animalTitle}>{animal.name}</h3>
       {animal.breed && <p className={animalMeta}>{animal.breed}</p>}
       <p className={animalMeta}>Age: {animal.age}</p>
+      {animal.address && (
+        <p className={animalMeta}>📍 {animal.address}</p>
+      )}
       <p className="text-sm text-[#4a6741] leading-relaxed line-clamp-2 mt-1">
         {animal.description}
       </p>
+
+      <div className="border-t border-[#b0c9a8]/50 mt-2 pt-2 flex flex-col gap-0.5">
+        {animal.rescuer && (
+          <p className={animalMeta}>
+            Rescuer: {animal.rescuer.firstName} {animal.rescuer.lastName || ""}
+          </p>
+        )}
+        {animal.status === "Adopted" && animal.adoptedBy && (
+          <p className={animalMeta}>
+            Adopted by: {animal.adoptedBy.firstName} {animal.adoptedBy.lastName || ""}
+          </p>
+        )}
+        {animal.fromStray && animal.strayReportedBy && (
+          <p className={animalMeta}>
+            Reported by: {animal.strayReportedBy.firstName}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
@@ -90,7 +117,9 @@ function Home() {
           <>
             {available.length > 0 && (
               <section className="mb-12">
-                <p className={sectionAvailable}>Available for Adoption — {available.length}</p>
+                <p className={sectionAvailable}>
+                  Available for Adoption — {available.length}
+                </p>
                 <div className={animalGrid}>
                   {available.map((a) => (
                     <AnimalCard key={a._id} animal={a} cardClass={availableCard} navigate={navigate} />

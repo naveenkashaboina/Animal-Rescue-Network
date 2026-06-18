@@ -1,5 +1,4 @@
 import exp from "express";
-import { userModel } from "../models/UserModel.js";
 import { animalModel } from "../models/AnimalModel.js";
 import { strayReportModel } from "../models/StrayReportModel.js";
 import { verifyToken } from "../middlewares/VerifyToken.js";
@@ -11,11 +10,18 @@ export const rescuerApp = exp.Router();
 rescuerApp.post("/animal", verifyToken("RESCUER"), upload.single("imageUrl"), async (req, res, next) => {
   let cloudinaryResult;
   try {
-    const { name, species, breed, age, description, status } = req.body;
+    const { name, species, breed, age, description, status, address } = req.body;
     const rescuerId = req.user.id;
     if (req.file) cloudinaryResult = await uploadToCloudinary(req.file.buffer);
     const animalDoc = new animalModel({
-      rescuer: rescuerId,name,species,breed: breed || undefined,age,description,status: status || "Available",
+      rescuer: rescuerId,
+      name,
+      species,
+      breed: breed || undefined,
+      age,
+      description,
+      address: address || undefined,
+      status: status || "Available",
       imageUrl: cloudinaryResult?.secure_url || undefined,
     });
     await animalDoc.save();
@@ -28,16 +34,18 @@ rescuerApp.post("/animal", verifyToken("RESCUER"), upload.single("imageUrl"), as
 
 rescuerApp.get("/animals", verifyToken("RESCUER"), async (req, res) => {
   const rescuerIdOfToken = req.user?.id;
-  const animalsList = await animalModel.find({ rescuer: rescuerIdOfToken });
+  const animalsList = await animalModel
+    .find({ rescuer: rescuerIdOfToken })
+    .populate("adoptedBy", "firstName lastName email");
   res.status(200).json({ message: "animals", payload: animalsList });
 });
 
 rescuerApp.put("/animals", verifyToken("RESCUER"), async (req, res) => {
   const rescuerIdOfToken = req.user?.id;
-  const { animalId, name, species, breed, age, description, status } = req.body;
+  const { animalId, name, species, breed, age, description, status, address } = req.body;
   const modifiedAnimal = await animalModel.findOneAndUpdate(
     { _id: animalId, rescuer: rescuerIdOfToken },
-    { $set: { name, species, breed, age, description, status } },
+    { $set: { name, species, breed, age, description, status, address } },
     { new: true }
   );
   if (!modifiedAnimal) return res.status(403).json({ message: "Not authorized to edit this animal" });
@@ -60,7 +68,9 @@ rescuerApp.get("/animal/:id/requests", verifyToken("RESCUER"), async (req, res) 
   const rescuerIdOfToken = req.user?.id;
   const animal = await animalModel
     .findOne({ _id: req.params.id, rescuer: rescuerIdOfToken })
-    .populate("inquiries.user", "firstName lastName email profileImageUrl");
+    .populate("inquiries.user", "firstName lastName email profileImageUrl")
+    .populate("adoptedBy", "firstName lastName email")
+    .populate("strayReportedBy", "firstName email");
   if (!animal) return res.status(404).json({ message: "Animal not found" });
   res.status(200).json({ message: "Requests", payload: animal });
 });
@@ -77,9 +87,12 @@ rescuerApp.put("/inquiry/approve", verifyToken("RESCUER"), async (req, res) => {
   animal.status = "Adopted";
   animal.adoptedBy = inquiry.user;
   await animal.save();
-  const populated = await animalModel.findById(animalId)
+  const populated = await animalModel
+    .findById(animalId)
     .populate("inquiries.user", "firstName email")
-    .populate("adoptedBy", "firstName email");
+    .populate("adoptedBy", "firstName lastName email")
+    .populate("rescuer", "firstName lastName email")
+    .populate("strayReportedBy", "firstName email");
   res.status(200).json({ message: "Adoption approved", payload: populated });
 });
 
@@ -96,7 +109,8 @@ rescuerApp.put("/inquiry/reject", verifyToken("RESCUER"), async (req, res) => {
 });
 
 rescuerApp.get("/stray-reports", verifyToken("RESCUER"), async (req, res) => {
-  const reports = await strayReportModel.find({ status: { $in: ["Open", "Claimed"] } })
+  const reports = await strayReportModel
+    .find({ status: { $in: ["Open", "Claimed"] } })
     .populate("reportedBy", "firstName email")
     .sort({ createdAt: -1 });
   res.status(200).json({ message: "Stray reports", payload: reports });
@@ -116,13 +130,24 @@ rescuerApp.put("/stray-reports/claim", verifyToken("RESCUER"), async (req, res) 
 
 rescuerApp.post("/stray-reports/convert", verifyToken("RESCUER"), async (req, res, next) => {
   try {
-    const { reportId, name, breed, age, description } = req.body;
+    const { reportId, name, breed, age, description, address } = req.body;
     const rescuerId = req.user?.id;
-    const report = await strayReportModel.findOne({ _id: reportId, claimedBy: rescuerId });
+    const report = await strayReportModel
+      .findOne({ _id: reportId, claimedBy: rescuerId })
+      .populate("reportedBy", "_id");
     if (!report) return res.status(404).json({ message: "Report not found or not claimed by you" });
     const newAnimal = new animalModel({
-      rescuer: rescuerId,name,species: report.species,breed: breed || "",age,description, imageUrl: report.imageUrl || "",
+      rescuer: rescuerId,
+      name,
+      species: report.species,
+      breed: breed || undefined,
+      age,
+      description,
+      address: address || report.location,
+      imageUrl: report.imageUrl || undefined,
       status: "In Care",
+      fromStray: true,
+      strayReportedBy: report.reportedBy?._id || report.reportedBy,
     });
     await newAnimal.save();
     report.status = "Resolved";
