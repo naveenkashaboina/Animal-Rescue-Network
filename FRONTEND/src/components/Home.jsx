@@ -93,6 +93,9 @@ function Home() {
             Browse animals in need of a loving home. Each one has been rescued and
             is waiting for the right family.
           </p>
+          <p className="text-sm text-[#2d6a1f] font-medium mt-2">
+              Free of Cost but Full of Love. Every adoption on this platform is completely free.
+          </p>
         </div>
 
         <div className="flex flex-wrap gap-2 mb-10">
@@ -143,7 +146,7 @@ function Home() {
             {adopted.length > 0 && (
               <section className="mb-4">
                 <div className={divider} />
-                <p className={sectionAdopted}>Successfully Adopted — {adopted.length}</p>
+                <p className={sectionAdopted}>Successfully Adopted By Paying Love, Not Money — {adopted.length}</p>
                 <div className={animalGrid}>
                   {adopted.map((a) => (
                     <AnimalCard key={a._id} animal={a} cardClass={adoptedCard} navigate={navigate} />
