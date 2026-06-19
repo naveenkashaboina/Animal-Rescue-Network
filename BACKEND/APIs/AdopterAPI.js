@@ -20,16 +20,24 @@ adopterApp.put("/animals", verifyToken("USER"), async (req, res) => {
   const { animalId, message } = req.body;
   const userId = req.user?.id;
   const animalDocument = await animalModel
-    .findOne({ _id: animalId, isAnimalActive: true })
-    .populate("inquiries.user", "email firstName");
+  .findOne({ _id: animalId, isAnimalActive: true });
   if (!animalDocument) return res.status(404).json({ message: "Animal not found" });
   if (animalDocument.status !== "Available")
-    return res.status(400).json({ message: "This animal is not available for adoption" });
-  const alreadyRequested = animalDocument.inquiries.some(
-    (inq) => inq.user?._id?.toString() === userId || inq.user?.toString() === userId
-  );
-  if (alreadyRequested)
-    return res.status(400).json({ message: "You have already sent a request for this animal" });
+  return res.status(400).json({ message: "This animal is not available for adoption" });
+
+  const existingRequest = animalDocument.inquiries.find((inq) => {
+  const inquiryUserId = inq.user?._id
+    ? inq.user._id.toString()
+    : inq.user?.toString();
+  return inquiryUserId === userId.toString();
+});
+
+if (existingRequest?.status === "Approved") {
+  return res.status(400).json({ message: "Your request has already been approved" });
+}
+if (existingRequest?.status === "Pending") {
+  return res.status(400).json({ message: "You already have a pending request for this animal" });
+}
   animalDocument.inquiries.push({ user: userId, message, status: "Pending" });
   await animalDocument.save();
   const populated = await animalModel
