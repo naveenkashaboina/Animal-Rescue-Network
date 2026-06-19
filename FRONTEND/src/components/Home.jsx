@@ -88,7 +88,7 @@ function Home() {
     <div className={pageBackground}>
       <div className={pageWrapper}>
         <div className="mb-10">
-          <h1 className={pageTitleClass}>Find Your Companion</h1>
+          <h1 className={pageTitleClass}>Find Your Companion For Free</h1>
           <p className={`${bodyText} mt-3 max-w-xl`}>
             Browse animals in need of a loving home. Each one has been rescued and
             is waiting for the right family.
