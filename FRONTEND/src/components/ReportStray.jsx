@@ -45,6 +45,9 @@ function ReportStray() {
         <p className="text-sm text-[#4a6741] text-center mb-6">
           Spotted a stray? Submit a report and a nearby rescuer will be notified.
         </p>
+        <p className="text-xs text-[#2d6a1f] text-center font-medium mb-4">
+            Reporting is free — always.
+        </p>
         {serverError && <p className={`${errorClass} mb-4`}>{serverError}</p>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={formGroup}>
