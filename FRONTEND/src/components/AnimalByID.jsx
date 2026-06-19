@@ -38,13 +38,14 @@ function AnimalByID() {
 
   useEffect(() => { fetchAnimal(); }, [id]);
 
-  const myRequest = animal?.inquiries?.find(
-    (inq) =>
-      inq.user?._id === currentUser?.id ||
-      inq.user?._id === currentUser?._id ||
-      inq.user === currentUser?.id ||
-      inq.user === currentUser?._id
-  );
+  const myRequest = isAuthenticated && currentUser
+  ? animal?.inquiries?.find((inq) => {
+      const inquiryUserId = inq.user?._id
+        ? inq.user._id.toString()
+        : inq.user?.toString();
+      return inquiryUserId === (currentUser._id || currentUser.id)?.toString();
+    })
+  : null;
 
   const handleRequest = async () => {
     if (!message.trim()) return toast.error("Please write a message");
