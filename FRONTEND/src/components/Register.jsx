@@ -46,6 +46,9 @@ function Register() {
     <div className={`${pageBackground} flex items-center justify-center py-16 px-4`}>
       <div className={formCard}>
         <h2 className={formTitle}>Create Account</h2>
+        <p className="text-center text-sm text-[#2d6a1f] font-medium mb-4">
+          Free of Cost — Full of Love
+        </p>
         {serverError && <p className={`${errorClass} mb-4`}>{serverError}</p>}
         <form onSubmit={handleSubmit(onRegister)}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
